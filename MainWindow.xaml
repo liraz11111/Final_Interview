@@ -1,0 +1,104 @@
+﻿<Window x:Class="Final_Interview.MainWindow"
+        Icon="appIcon (1).ico"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="BGR Converter" Width="900" Height="450">
+    <Window.Resources>
+        <!-- a pattern for the captions, *kinda* like interface -->
+        <Style x:Key="CaptionStyle" TargetType="TextBlock">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="55"/>
+            <RowDefinition Height="45"/>
+            <RowDefinition/>
+            <RowDefinition Height="18"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Background="Navy" Height="55">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <!-- because of *, when the name text block turns invissible- the clock would move to the right( is et the colock horizintal- right) -->
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <!-- Main welcome text -->
+            <TextBlock x:Name="welcome_txt" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                 FontSize="25" FontWeight="Bold" Foreground="#C5C7CB"
+                 Text="Welcome to NSA's BGR Converter"/>
+            <!-- Live clock -->
+            <TextBlock x:Name="ClockTxt" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"
+                 Margin="10,0,10,0" FontSize="12" FontStyle="Italic" FontWeight="Bold" Foreground="#C5C7CB"/>
+            <!-- Name-entry box -->
+            <TextBox x:Name="NameBox" Grid.Column="2" Width="180" Height="24" VerticalAlignment="Center"
+               Margin="0,0,20,0" FontSize="14" Text="Enter your name please" Foreground="#808080"
+               GotFocus="NameBox_GotFocus" LostFocus="NameBox_LostFocus" KeyDown="NameBox_KeyDown"/>
+            <!-- the user enters his name in this text block. see functions  -->
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="85*"/>
+                <ColumnDefinition Width="15*"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="1" CornerRadius="6" Background="#182C46" Margin="0,15,20,0">
+                <Button x:Name="btUPload" Background="Transparent" BorderThickness="0" Foreground="#C5C7CB"
+                Padding="16,6" Content="Upload image" Click="btUPload_Click"/>
+            </Border>
+        </Grid>
+
+        <Rectangle Grid.Row="3" Height="18">
+            <Rectangle.Fill>
+                <!-- that's the color it's gonna start with -->
+                <SolidColorBrush x:Name="FooterBrush" Color="#2B2E33"/>
+            </Rectangle.Fill>
+            <!-- here I make the bottom row change between 2 colors -->
+            <Rectangle.Triggers>
+                <EventTrigger RoutedEvent="Rectangle.Loaded">
+                    <!-- rectangle is ready and done customizing  -->
+                    <BeginStoryboard>
+                        <!-- start the animation action after "loaded"  -->
+                        <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                            <ColorAnimation Storyboard.TargetName="FooterBrush" Storyboard.TargetProperty="Color"
+                              To="Navy" Duration="0:0:4"/>
+                            <!-- 4 secondes from each color  -->
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Rectangle.Triggers>
+        </Rectangle>
+
+        <Grid Grid.Row="2" Margin="40,40,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- bgr captions and images -->
+            <TextBlock x:Name="Ocaption" Style="{StaticResource CaptionStyle}" Grid.Row="0" Grid.Column="0" Text="Original File:"/>
+            <TextBlock x:Name="Bcaption" Style="{StaticResource CaptionStyle}" Grid.Row="0" Grid.Column="1" Text="Blue BGR:"/>
+            <TextBlock x:Name="Gcaption" Style="{StaticResource CaptionStyle}" Grid.Row="0" Grid.Column="2" Text="Green BGR:"/>
+            <TextBlock x:Name="Rcaption" Style="{StaticResource CaptionStyle}" Grid.Row="0" Grid.Column="3" Text="Red BGR:"/>
+            <Image x:Name="originalPic" Grid.Row="1" Grid.Column="0" Width="200" Height="260" Stretch="Uniform"/>
+            <Image x:Name="RGBblue"    Grid.Row="1" Grid.Column="1" Width="200" Height="260" Stretch="Uniform"/>
+            <Image x:Name="RGBgreen"   Grid.Row="1" Grid.Column="2" Width="200" Height="260" Stretch="Uniform"/>
+            <Image x:Name="RGBred"     Grid.Row="1" Grid.Column="3" Width="200" Height="260" Stretch="Uniform"/>
+        </Grid>
+    </Grid>
+</Window>
