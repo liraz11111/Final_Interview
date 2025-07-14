@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -23,7 +23,7 @@ namespace Final_Interview
         private const string NoFilePickedMsg = "Error: No file was picked.";
         private const string InvalidImageMsg = "Error: That file must be a .jpg/.jpeg/.png/.bmp and its contents must match the format.";
         private const string unexpected_error = "An error occurred while processing the image:\n";
-
+        private const string is_file_null= "Path cannot be null or empty.";
 
 
         private void NameBox_GotFocus(object _, RoutedEventArgs __)// theres "focus" on object. - user wants to write in text block
@@ -95,27 +95,43 @@ namespace Final_Interview
 
         private void ProcessImage(string path)
         {
-            try
-            {
-                CreateBackup(path);// not ruin original file
-                DisplayOriginalImage(path);
-                Helpers.ShowBgrChannels(path, RGBblue, RGBgreen, RGBred);
-                Helpers.TurnVS(Ocaption, Bcaption, Gcaption, Rcaption);
-            }
-            catch (Exception ex)//something unpredictable happened
+            // Check if path is null or empty BEFORE using it or creating backup
+            if (string.IsNullOrEmpty(path))
             {
                 MessageBox.Show(
-                 unexpected_error + ex.Message, "Processing Error",
-                 MessageBoxButton.OK,
-                 MessageBoxImage.Error);
+                    is_file_null, "Invalid Path",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return; // Stop further processing if the input is invalid
+            }
+
+            try
+            {
+                // Create a backup so we don't ruin the original file
+                string backupPath = CreateBackup(path);
+
+                // Display the backup image, not the original
+                DisplayOriginalImage(backupPath);
+
+                Helpers.ShowBgrChannels(backupPath, RGBblue, RGBgreen, RGBred);
+                Helpers.TurnVS(Ocaption, Bcaption, Gcaption, Rcaption);
+            }
+            catch (Exception ex) // something unpredictable happened
+            {
+                MessageBox.Show(
+                    unexpected_error + ex.Message, "Processing Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
-        private void CreateBackup(string path)
+        // This function creates a backup and returns the backup path
+        private string CreateBackup(string path)
         {
+            // Build the backup filename: original name + "_backup" + original extension
             string backup = Path.ChangeExtension(path, null) + "_backup" + Path.GetExtension(path);
             if (!File.Exists(backup))
-                File.Copy(path, backup);
+                File.Copy(path, backup); // creates the backup file if it doesn't exist yet
+            return backup; // return the backup path to use instead of the original
         }
 
         private void DisplayOriginalImage(string path)
