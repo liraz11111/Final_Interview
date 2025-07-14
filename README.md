@@ -1,5 +1,4 @@
 # Final_Interview
-# Final_Interview
 
 A C# WPF application for visualizing BGR (Blue, Green, Red) image channels.  
 Built with WPF and Emgu.CV (OpenCV for .NET).
