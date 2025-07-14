@@ -17,6 +17,14 @@
     <PackageReference Include="Emgu.CV.runtime.windows" Version="4.11.0.5746" />
   </ItemGroup>
 
+<Target Name="CopyEmguCVNativeBinaries" AfterTargets="Build">
+  <ItemGroup>
+    <EmguCVNativeAssemblies Include="$(UserProfile)\.nuget\packages\emgu.cv.runtime.windows\*\runtimes\win-x64\native\**\*" />
+  </ItemGroup>
+  <Copy SourceFiles="@(EmguCVNativeAssemblies)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+</Target>
+
+
   <ItemGroup>
     <Resource Include="appIcon (1).ico">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
